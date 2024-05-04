@@ -26,6 +26,12 @@ mv public/* -to _default/public
 vi vite.config.ts -new
 > baseHref変数のPRODモード指定を変更し忘れないように
 
+drag_and_drop project-folder into GitHub_Desktop
+> Click: create a repository
+> Click: Create repository
+> Click: Publish repository
+> Click: Publish repository
+
 **以上で設定完了**
 
 ---
