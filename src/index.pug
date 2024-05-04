@@ -1,0 +1,14 @@
+doctype html
+html(lang="ja")
+  head
+    meta(charset="utf-8")
+    base(href=baseHref)
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Hello!
+  body
+    h1 Hello!
+    .alert.alert-primary(role="alert") alert!
+    ul.flex.gap-x-2
+      li.text-blue-200 hoge
+      li.text-red-200 fuga
+    script(type="module", src="ts/index.ts")
