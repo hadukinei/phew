@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "copy": "node copyPublic.js",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -21,5 +22,8 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-minify": "^1.5.2"
+  },
+  "dependencies": {
+    "smooth-scrollbar": "^8.8.4"
   }
 }

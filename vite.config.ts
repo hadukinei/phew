@@ -30,7 +30,9 @@ export default defineConfig({
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: assetInfo => {
-          if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
+          if(/^_/.test(assetInfo.name ?? '')){
+            return '';
+          }else if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
             return 'assets/img/[name][extname]';
           }else if(/[.](woff2?|ttf|otf)$/.test(assetInfo.name ?? '')){
             return 'assets/fonts/[name][extname]';
@@ -43,9 +45,9 @@ export default defineConfig({
   },
   plugins: [
     vitePluginPugStatic({
-      buildLocals: {baseHref: baseHref.production},
+      buildLocals: {mode: 'PROD', baseHref: baseHref.production},
       buildOptions: {basedir: "src"},
-      serveLocals: {baseHref: baseHref.development},
+      serveLocals: {mode: 'DEV', baseHref: baseHref.development},
       serveOptions: {basedir: "src"},
     }),
     ViteMinifyPlugin({}),
