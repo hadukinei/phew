@@ -20,6 +20,7 @@ npx tailwindcss init -p
 
 ## 設定変更
 vi .gitignore -add -- :last package-lock.json
+vi .gitignore -commentout -- dist
 vi package.json :add scripts.copy
 vi copyPublic.js -- take_from_previous_project
 vi tailwind.config.js -change -- :from content:[], :to content:['./src/**/*.{ts,pug}'],
