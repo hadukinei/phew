@@ -65,7 +65,16 @@ section#first-view{
   }
 
   i{
-    @apply flex justify-center items-center absolute left-0 bottom-0 w-full h-12 text-zinc-700 animate-bounce;
+    @apply flex justify-center items-center absolute left-0 bottom-0 w-full h-12 text-zinc-700;
+
+    svg{
+      @apply animate-bounce;
+    }
+    span{
+      @apply animate-bounce;
+      animation-delay: 0.5s;
+      font-family: var(--font-en);
+    }
   }
 }
 
@@ -164,32 +173,37 @@ section#link{
 }
 
 section#footer{
-  @apply grid relative w-full h-64;
+  @apply relative w-screen;
 
   >img{
     @apply absolute left-0 top-0 w-full h-full object-cover object-center;
   }
 
-  article{
-    @apply flex flex-col items-center justify-center gap-y-3 relative w-full max-w-[1280px] mx-auto;
+  .inner{
+    @apply grid relative w-max h-64 mx-auto px-2;
+    backdrop-filter: blur(12.5px) opacity(0.9) brightness(1.65);
 
-    img{
-      @apply h-28 p-2 rounded-full bg-black;
-    }
-    div{
-      @apply flex flex-col items-center gap-y-[0.125rem];
+    article{
+      @apply flex flex-col items-center justify-center gap-y-3;
 
-      strong, em{
-        @apply w-fit px-2 text-zinc-200 bg-zinc-800;
+      img{
+        @apply h-28 p-2 rounded-full bg-black;
+      }
+      div{
+        @apply flex flex-col items-center gap-y-[0.125rem];
+
+        strong, em{
+          @apply w-fit;
+        }
       }
     }
-  }
 
-  footer{
-    @apply self-end flex flex-col items-center gap-y-[0.125rem] relative h-8 px-[0.125rem];
+    footer{
+      @apply self-end flex flex-col items-center gap-y-[0.125rem] h-8 px-[0.125rem];
 
-    h2, p{
-      @apply w-fit px-2 text-zinc-200 bg-zinc-800;
+      h2, p{
+        @apply w-fit;
+      }
     }
   }
 }

@@ -21,7 +21,7 @@ npx tailwindcss init -p
 ## 設定変更
 vi .gitignore -add -- :last package-lock.json
 vi .gitignore -commentout -- dist
-vi package.json :add scripts.copy
+vi package.json :change scripts
 vi copyPublic.js -- take_from_previous_project
 vi tailwind.config.js -change -- :from content:[], :to content:['./src/**/*.{ts,pug}'],
 vi vite.config.ts -new
@@ -52,6 +52,9 @@ drag_and_drop project-folder into GitHub_Desktop
 srcフォルダに、pug, scss, tsファイルを作成する
 
 npm run devで開発し、npm run buildで書き出す
+buildはApacheが通っているフォルダを検証可能
+サーバー用に書き出す場合はnpm run build:server
+
 DEVのアドレスは`http://localhost:5173`辺り（ポート番号は変わるかも）
 
 ### pug

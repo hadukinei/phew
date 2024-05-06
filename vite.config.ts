@@ -4,11 +4,18 @@ import vitePluginPugStatic from '@macropygia/vite-plugin-pug-static';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
 import globule from 'globule';
 
+let mode = process.env.NODE_ENV ?? '', dist = 'local';
+for(let i = 0, l = process.argv.length; i < l; i ++){
+  if(process.argv[i] === '-server'){
+    dist = 'server';
+  }
+}
+
 /**
  * PRODモードのパス書き換えを忘れないように
  */
 const baseHref = {
-  production: '/_local/phew/dist/', // '/phew/',
+  production: (dist === 'server') ? '/phew/' : '/_local/phew/dist/',
   development: '/',
 };
 
@@ -20,7 +27,7 @@ const htmlFiles = globule.find('src/**/*.pug', {
 
 export default defineConfig({
   root: 'src',
-  base: (process.env.NODE_ENV === 'production') ? baseHref.production : baseHref.development,
+  base: baseHref[mode],
   build: {
     emptyOutDir: true,
     outDir: resolve(__dirname, 'dist'),
@@ -45,9 +52,9 @@ export default defineConfig({
   },
   plugins: [
     vitePluginPugStatic({
-      buildLocals: {mode: 'PROD', baseHref: baseHref.production},
+      buildLocals: {mode: 'PROD', dist: dist, baseHref: baseHref[mode]},
       buildOptions: {basedir: "src"},
-      serveLocals: {mode: 'DEV', baseHref: baseHref.development},
+      serveLocals: {mode: 'DEV', dist: dist, baseHref: baseHref[mode]},
       serveOptions: {basedir: "src"},
     }),
     ViteMinifyPlugin({}),
