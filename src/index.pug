@@ -1,3 +1,4 @@
+- var baseUri = (dist === 'xserver') ? 'https://phew.gothicum.xyz/' : 'https://hadukinei.github.io/phew/'
 doctype html
 html(lang="ja")
   head
@@ -19,14 +20,14 @@ html(lang="ja")
 
     title phew
     meta(name=`description` content=`phew description`)
-    meta(property=`og:url` content=`https://hadukinei.github.io/phew/`)
+    meta(property=`og:url` content=baseUri)
     meta(property=`og:title` content=`phew`)
     meta(property=`og:description` content=`phew description`)
     meta(property=`og:site_name` content=`phew`)
     if dist === 'server'
-      meta(property=`og:image` content=`https://hadukinei.github.io/phew/public/favicon-512.png`)
-      link(rel=`index` href=`https://hadukinei.github.io/phew/`)
-      link(rel=`canonical` href=`https://hadukinei.github.io/phew/`)
+      meta(property=`og:image` content=baseUri+`public/favicon-512.png`)
+      link(rel=`index` href=baseUri)
+      link(rel=`canonical` href=baseUri)
 
     meta(name=`robots` content=`index,follow`)
     meta(name=`rating` content=`general`)
@@ -41,11 +42,11 @@ html(lang="ja")
     meta(name=`geo.region` content=`JP`)
     //-meta(name=`geo.placename` content=`Sakurai city, Nara pref., Japan`)
     if dist === 'server'
-      link(rel=`icon` href=`https://hadukinei.github.io/phew/public/favicon.ico` sizes=`any`)
-      link(rel=`icon` href=`https://hadukinei.github.io/phew/public/favicon.svg` type=`image/svg+xml`)
-      link(rel=`mask-icon` href=`https://hadukinei.github.io/phew/public/favicon.svg` color=`#000`)
-      link(rel=`apple-touch-icon` href=`https://hadukinei.github.io/phew/public/apple-touch-icon.png`)
-      link(rel=`manifest` href=`https://hadukinei.github.io/phew/public/manifest.webmanifest`)
+      link(rel=`icon` href=baseUri+`public/favicon.ico` sizes=`any`)
+      link(rel=`icon` href=baseUri+`public/favicon.svg` type=`image/svg+xml`)
+      link(rel=`mask-icon` href=baseUri+`public/favicon.svg` color=`#000`)
+      link(rel=`apple-touch-icon` href=baseUri+`public/apple-touch-icon.png`)
+      link(rel=`manifest` href=baseUri+`public/manifest.webmanifest`)
     link(rel=`preconnect` href=`https://fonts.googleapis.com`)
     link(rel=`preconnect` href=`https://fonts.gstatic.com` crossorigin=``)
   body

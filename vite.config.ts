@@ -10,15 +10,21 @@ let mode = process.env.NODE_ENV ?? '', dist = 'local';
 for(let i = 0, l = process.argv.length; i < l; i ++){
   if(process.argv[i] === '-server'){
     dist = 'server';
+    break;
+  }
+  if(process.argv[i] === '-xserver'){
+    dist = 'xserver';
+    break;
   }
 }
+console.log(mode, dist);
 
 /**
  * PRODモードのパス書き換えを忘れないように
  * データ自体は.envに保存しています
  */
 const baseHref = {
-  production: (dist === 'server') ? dotenvData?.BASEDIR_SERVER : dotenvData?.BASEDIR_LOCAL,
+  production: (dist === 'server') ? dotenvData?.BASEDIR_SERVER : (dist === 'xserver' ? dotenvData?.BASEDIR_XSERVER : dotenvData?.BASEDIR_LOCAL),
   development: '/',
 };
 

@@ -175,3 +175,21 @@ distフォルダをルートディレクトリにするための設定変更を�
 static.ymlを保存すると、自動的にデプロイ処理が走って完了
 distがルートディレクトリになっている
 > .github/workflows/static.ymlが新たに作成されるのでフェッチすること
+
+---
+---
+# 独自ドメインでの公開
+- Settings
+- Pages
+- Custom domain
+- `Input`: domain
+> https://hoge.fuga.com/でなく、hoge.fuga.comと「ドメイン名」にすること
+
+これで可能と思うが、独自ドメインを持っていないので検証不能
+XServerのサブドメインで実験してみたが駄目だった
+
+---
+---
+# レンタルサーバーでの公開
+distフォルダ以下を、そのままFTPでアップロードする
+ドメイン名がGitHub Pagesの時からは変わっているので要注意
