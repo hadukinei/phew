@@ -30,7 +30,7 @@ const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
 });
 
 export default defineConfig({
-  root: './',
+  root: 'src',
   base: baseHref[mode],
   build: {
     emptyOutDir: true,
@@ -41,9 +41,7 @@ export default defineConfig({
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: assetInfo => {
-          /*if(/[.](pug)$/.test(assetInfo.name ?? '')){
-            return '../[name][extname].html';
-          }else */if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
+          if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
             return 'assets/img/[name][extname]';
           }else if(/[.](woff2?|ttf|otf)$/.test(assetInfo.name ?? '')){
             return 'assets/fonts/[name][extname]';
