@@ -41,9 +41,9 @@ export default defineConfig({
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: assetInfo => {
-          /*if(/[.](pug)$/.test(assetInfo.name ?? '')){
+          if(/[.](pug)$/.test(assetInfo.name ?? '')){
             return '../[name][extname].html';
-          }else */if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
+          }else if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
             return 'assets/img/[name][extname]';
           }else if(/[.](woff2?|ttf|otf)$/.test(assetInfo.name ?? '')){
             return 'assets/fonts/[name][extname]';
