@@ -48,16 +48,22 @@ drag_and_drop project-folder into GitHub_Desktop
 
 ---
 ---
-## 制作
+# 制作
 srcフォルダに、pug, scss, tsファイルを作成する
 
 npm run devで開発し、npm run buildで書き出す
 buildはApacheが通っているフォルダを検証可能
-サーバー用に書き出す場合はnpm run build:server
+サーバー用に書き出す場合はnpm run build:serverしてからnpm run copyする
+> ビルドをするとdistフォルダがクリーンアップされるので都度コピーする必要がある
 
 DEVのアドレスは`http://localhost:5173`辺り（ポート番号は変わるかも）
 
-### pug
+制作中は、GA/GTAGの設定は後回し
+URLは確定しているのだが、そのURLが未だprivate状態で公開されていないので登録ができない
+
+- `URL`: https://**GitHubアカウント名**.github.io/**リポジトリ名**/
+
+## pug
 基本的には通常のpug
 src/*.pugの階層を基本とする
 
@@ -67,7 +73,7 @@ src/*.pugの階層を基本とする
 + 末尾に`script(type="module", src="ts/index.ts")`を追記
 + srcフォルダ以下の階層にあるリソースファイルは自動的にバンドルされる
 
-### scss
+## scss
 src/css/*.scssの階層を基本とする
 
 Tailwind CSSを利用する場合、先頭に次の設定を追記
@@ -77,7 +83,7 @@ Tailwind CSSを利用する場合、先頭に次の設定を追記
   @tailwind utilities;
 ``
 
-### ts
+## ts
 src/ts/*.tsの階層を基本とする
 
 CSS/Scssファイルのインポート処理を行う
@@ -87,14 +93,85 @@ Bootstrapを利用する場合は下例のように読み込むだけでいい
   import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 ``
 
-### img
+## img
 src/img/*.{png,jpe?g,gif,svg}の階層を基本とする
 
-### Git管理
+## Git管理
 この時点ではPrivateリポジトリなので自由に制作可能
 
-### ちなみに
+## ちなみに
 本来のViteではbody直下には#appとscript(type="module")しかない
 SSRとしての機能を一切使わないのでPugでゴリ押しした
 
-RootDirをデプロイするのでなくdistをデプロイ対象にしたため、publicフォルダが機能しない恐れがある
+RootDirをデプロイするのでなくdistをデプロイ対象にするので、publicフォルダが機能しない
+公開前に`npm run copy`でdist/publicへとコピーする
+
+
+---
+---
+# GitHub Pagesでの公開
+
+## パブリックに変更
+github.comのリポジトリページへ移動
+
+- Settings
+- General
+- Danger Zone (下の方)
+- Change repository visibility
+- `Click`: Change visibility
+- `Select`: Change to public
+- `Click`: I want to make this repository public [*&#x2020; 1a*](#1a-注釈)
+- `Click`: I have read and understand these effects [*&#x2020; 1a*](#1a-注釈)
+- `Click`: Make this repository public [*&#x2020; 1a*](#1a-注釈)
+
+
+### 1a. 注釈
+```
+- 要はprivateからpublishにするために、
+- 「本当にやってもいいんですね？！」
+- と力強く念押しをしてくれているのでクリックする回数が~~無駄に~~多くなっている
+```
+
+## 公開設定
+そのままgithub.comで設定処理
+
+- Settings
+- Pages
+- Build and deployment
+- Branch
+- `Select`: from **None** to **master** [*&#x2020; 2a*](#2a-注釈)
+- `Change`: from **/(root)** to **DocumentRootにしたいフォルダ** [*&#x2020; 2b*](#2b-注釈)
+- `Click`: Save
+
+
+### 2a. 注釈
+```
+- 公開するブランチをmaster以外にする場合は適宜変更
+- 例えば公開後に大規模な更新が発生し、それをチームで処理する場合
+- 一度作業用のブランチを切って、そちらでGitの更新を掛ける分にはオートデプロイ処理は行われない
+- フィックスしたらマスターブランチへマージすればよい
+```
+
+### 2b. 注釈
+```
+- リポジトリのトップフォルダを希望するならそのまま
+- そこのindex.htmlがDirectoryIndexになる
+```
+
+## Vite用のデプロイ設定
+通常の方法であればこれで公開処理は完了
+GitHubのページをブラウザリロードすればURLが表示されるようになる
+distフォルダをルートディレクトリにするための設定変更を行う
+
+- Settings
+- Pages
+- Build and deployment
+- Source
+- `Change`: Deploy from a branchからGitHub Actionsに変更する
+- `Click`: Static HTMLのConfigure
+- `Edit`: jobs.deploy.steps.with.pathを"."から"./dist/"に変更
+- `Click`: Commit changes
+
+static.ymlを保存すると、自動的にデプロイ処理が走って完了
+distがルートディレクトリになっている
+> .github/workflows/static.ymlが新たに作成されるのでフェッチすること
