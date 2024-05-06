@@ -15,7 +15,7 @@ npm create vite@latest .
 - Select a variant
   - TypeScript
 
-npm i -D @macropygia/vite-plugin-pug-static sass globule @types/globule vite-plugin-minify fs bootstrap tailwindcss postcss autoprefixer
+npm i -D @macropygia/vite-plugin-pug-static sass globule @types/globule vite-plugin-minify fs dotenv bootstrap tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
 ## 設定変更

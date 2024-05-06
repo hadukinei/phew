@@ -3,6 +3,8 @@ import { defineConfig } from 'vite';
 import vitePluginPugStatic from '@macropygia/vite-plugin-pug-static';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
 import globule from 'globule';
+import { configDotenv } from 'dotenv';
+const dotenvData = configDotenv({path: './.env'}).parsed;
 
 let mode = process.env.NODE_ENV ?? '', dist = 'local';
 for(let i = 0, l = process.argv.length; i < l; i ++){
@@ -13,9 +15,10 @@ for(let i = 0, l = process.argv.length; i < l; i ++){
 
 /**
  * PRODモードのパス書き換えを忘れないように
+ * データ自体は.envに保存しています
  */
 const baseHref = {
-  production: (dist === 'server') ? '/phew/' : '/_local/phew/dist/',
+  production: (dist === 'server') ? dotenvData?.BASEDIR_SERVER : dotenvData?.BASEDIR_LOCAL,
   development: '/',
 };
 
