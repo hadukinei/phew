@@ -4,7 +4,7 @@ import vitePluginPugStatic from '@macropygia/vite-plugin-pug-static';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
 import globule from 'globule';
 import { configDotenv } from 'dotenv';
-const dotenvData = configDotenv({path: './.env'}).parsed;
+const dotenvData = configDotenv({path: '.env'}).parsed;
 
 let mode = process.env.NODE_ENV ?? '', dist = 'local';
 for(let i = 0, l = process.argv.length; i < l; i ++){
@@ -22,14 +22,15 @@ const baseHref = {
   development: '/',
 };
 
-const htmlFiles = globule.find('src/**/*.pug', {
+const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
   ignore: [
-    'src/**/_*.pug',
+    'src/**/_*.*',
+    '_*.*',
   ],
 });
 
 export default defineConfig({
-  root: 'src',
+  root: './',
   base: baseHref[mode],
   build: {
     emptyOutDir: true,
@@ -40,9 +41,9 @@ export default defineConfig({
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: assetInfo => {
-          if(/^_/.test(assetInfo.name ?? '')){
-            return '';
-          }else if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
+          /*if(/[.](pug)$/.test(assetInfo.name ?? '')){
+            return '../[name][extname].html';
+          }else */if(/[.](jpe?g|png|gif|svg)$/.test(assetInfo.name ?? '')){
             return 'assets/img/[name][extname]';
           }else if(/[.](woff2?|ttf|otf)$/.test(assetInfo.name ?? '')){
             return 'assets/fonts/[name][extname]';
