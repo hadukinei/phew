@@ -1,0 +1,15 @@
+section#info{
+  @apply flex items-center min-h-[75dvh];
+
+  article{
+    @apply w-full max-w-[800px] mx-auto py-12;
+
+    p{
+      @apply indent-4;
+
+      &:not(:last-of-type){
+        @apply mb-6;
+      }
+    }
+  }
+}

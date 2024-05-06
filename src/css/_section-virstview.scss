@@ -1,0 +1,33 @@
+section#first-view{
+  @apply relative h-screen pb-12;
+
+  figure{
+    @apply w-full h-full;
+
+    img{
+      @apply w-full h-full object-cover object-bottom;
+    }
+    figcaption{
+      @apply flex justify-center items-center absolute inset-0 mb-[25dvh] text-zinc-100 shadow-zinc-400;
+      font-family: var(--font-en);
+      font-size: min(4.5rem, 17.5vw);
+      line-height: 1.25;
+      word-break: keep-all;
+      text-align: center;
+      text-shadow: 4px 5px 0 var(--tw-shadow-color);
+    }
+  }
+
+  i{
+    @apply flex justify-center items-center absolute left-0 bottom-0 w-full h-12 text-zinc-700;
+
+    svg{
+      @apply animate-bounce;
+    }
+    span{
+      @apply animate-bounce;
+      animation-delay: 0.5s;
+      font-family: var(--font-en);
+    }
+  }
+}

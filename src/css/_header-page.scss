@@ -1,0 +1,20 @@
+// header
+#header{
+  @apply absolute z-10 top-0 left-0 w-full h-12 bg-zinc-800;
+
+  header{
+    @apply flex flex-row flex-nowrap justify-between items-center w-full max-w-[1280px] mx-auto;
+
+    h1 a img{
+      @apply h-12;
+    }
+
+    ul{
+      @apply flex flex-row flex-nowrap items-center gap-x-4 h-12;
+
+      a{
+        @apply text-zinc-100 hover:text-zinc-400 transition-colors duration-300;
+      }
+    }
+  }
+}

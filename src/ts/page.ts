@@ -1,5 +1,5 @@
 import '../css/reset.scss'
-import '../css/index.scss'
+import '../css/page.scss'
 
 import SmoothScrollbar from 'smooth-scrollbar';
 import SmoothScrollbarPluginOverscroll from 'smooth-scrollbar/plugins/overscroll';

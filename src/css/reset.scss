@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *::before, *::after{
   display: none;
 }
@@ -25,7 +29,23 @@ html{
   text-size-adjust: none;
 }
 
+:root{
+  --font-jp: "IBM Plex Sans JP", sans-serif;
+  --font-en: "Ubuntu", sans-serif;
+  @apply text-zinc-800 bg-zinc-100;
+}
+
 body{
   min-height: 100vh;
   min-height: 100dvh;
+}
+
+#main{
+  @apply h-screen;
+  font-family: var(--font-jp);
+}
+
+// scrollbar
+.scrollbar-thumb.scrollbar-thumb-y{
+  @apply bg-zinc-950;
 }

@@ -1,0 +1,75 @@
+section#link{
+  @apply overflow-hidden;
+
+  ul{
+    @apply grid grid-cols-2 w-full max-w-[800px] mx-auto;
+
+    li{
+      &.left a{
+        @apply relative pr-4 py-8 text-zinc-200 bg-zinc-700;
+        border-image: linear-gradient(#3f3f46,#3f3f46) fill 0 /1/ 0 0 0 100vw;
+        transition: color 0.3s, background-color 0.3s;
+
+        i{
+          @apply text-zinc-700 bg-zinc-200 transition-colors duration-300;
+        }
+
+        &::before{
+          @apply block content-[""] absolute right-0 top-0 w-0 h-full bg-zinc-200 transition-[width] duration-300;
+        }
+
+        &:hover{
+          @apply text-zinc-700 bg-zinc-200;
+
+          i{
+            @apply text-zinc-200 bg-zinc-700;
+          }
+
+          &::before{
+            @apply w-[50vw];
+          }
+        }
+      }
+
+      &.right a{
+        @apply relative pl-4 py-8 text-zinc-700 bg-zinc-200;
+        border-image: linear-gradient(#e4e4e7,#e4e4e7) fill 0 /1/ 0 100vw 0 0;
+        transition: color 0.3s, background-color 0.3s;
+
+        i{
+          @apply text-zinc-200 bg-zinc-700 transition-colors duration-300;
+        }
+
+        &::before{
+          @apply block content-[""] absolute left-0 top-0 w-0 h-full bg-zinc-700 transition-[width] duration-300;
+        }
+
+        &:hover{
+          @apply text-zinc-200 bg-zinc-700;
+
+          i{
+            @apply text-zinc-700 bg-zinc-200;
+          }
+
+          &::before{
+            @apply w-[50vw];
+          }
+        }
+      }
+
+      a{
+        @apply grid gap-y-6 h-full;
+
+        b{
+          @apply relative block text-2xl;
+        }
+        span{
+          @apply relative;
+        }
+        i{
+          @apply self-end relative block w-fit mx-auto px-4 sm:px-14 py-3;
+        }
+      }
+    }
+  }
+}

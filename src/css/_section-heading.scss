@@ -1,0 +1,20 @@
+// heading
+#heading{
+
+  figure{
+    @apply flex justify-center items-center relative h-48 mt-12;
+
+    img{
+      @apply absolute left-0 top-0 w-full h-full object-cover object-bottom;
+    }
+    figcaption{
+      @apply relative text-zinc-100 shadow-zinc-800/60;
+      font-family: var(--font-en);
+      font-size: min(3rem, 15vw);
+      line-height: 1.25;
+      word-break: keep-all;
+      text-align: center;
+      text-shadow: 4px 5px 0 var(--tw-shadow-color);
+    }
+  }
+}
