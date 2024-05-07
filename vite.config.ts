@@ -6,18 +6,75 @@ import globule from 'globule';
 import { configDotenv } from 'dotenv';
 const dotenvData = configDotenv({path: '.env'}).parsed;
 
-let mode = process.env.NODE_ENV ?? '';
-let version = dotenvData?.VERSION;
-let path = {
+/**
+ * 必要なURLやPATHを.envから取得
+ * @requires PRODモードのパス書き換えを忘れないように
+ */
+let path: {mode: string, strictAbsPath: string, rootAbsPath: string, innerPublicPath: string, outerPublicPath: string, version: string} = (() => {
+  let mode = process.env.NODE_ENV ?? '';
+  let strictAbsPath = [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join('');
+  let rootAbsPath = [dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join('');
+  let innerPublicPath = [dotenvData?.PUBLIC_DEV].join('');
+  let outerPublicPath = [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV, dotenvData?.PUBLIC_DEV].join('');
+  let version = dotenvData?.VERSION ?? '';
+
+  let isTerminate = false;
+
+  for(let i = 0, l = process.argv.length; i < l; i ++){
+    switch(process.argv[i]){
+      case '-local':
+        mode += process.argv[i];
+        strictAbsPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
+        rootAbsPath = [dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
+        innerPublicPath = [dotenvData?.PUBLIC_LOCAL].join('');
+        outerPublicPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL, dotenvData?.PUBLIC_LOCAL].join('');
+        isTerminate = true;
+      break;
+
+      case '-githubpages':
+        mode += process.argv[i];
+        strictAbsPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
+        rootAbsPath = [dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
+        innerPublicPath = [dotenvData?.PUBLIC_GITHUBPAGES].join('');
+        outerPublicPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES, dotenvData?.PUBLIC_GITHUBPAGES].join('');
+        isTerminate = true;
+      break;
+
+      case '-xserver':
+        mode += process.argv[i];
+        strictAbsPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
+        rootAbsPath = [dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
+        innerPublicPath = [dotenvData?.PUBLIC_XSERVER].join('');
+        outerPublicPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER, dotenvData?.PUBLIC_XSERVER].join('');
+        isTerminate = true;
+      break;
+    }
+
+    if(isTerminate) break;
+  }
+
+  return {
+    mode: mode,
+    strictAbsPath: strictAbsPath,
+    rootAbsPath: rootAbsPath,
+    innerPublicPath: innerPublicPath,
+    outerPublicPath: outerPublicPath,
+    version: version,
+  }
+})();
+/*
+let path: {mode: string, strictAbsPath: string, rootAbsPath: string, innerPublicPath: string, outerPublicPath: string, version: string} = {
+  mode: process.env.NODE_ENV ?? '',
   strictAbsPath: [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join(''),
   rootAbsPath: [dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join(''),
   innerPublicPath: [dotenvData?.PUBLIC_DEV].join(''),
   outerPublicPath: [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV, dotenvData?.PUBLIC_DEV].join(''),
+  version: dotenvData?.VERSION ?? '',
 };
 
 for(let i = 0, l = process.argv.length; i < l; i ++){
   if(process.argv[i] === '-local'){
-    mode += process.argv[i];
+    path.mode += process.argv[i];
     path.strictAbsPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
     path.rootAbsPath = [dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
     path.innerPublicPath = [dotenvData?.PUBLIC_LOCAL].join('');
@@ -25,7 +82,7 @@ for(let i = 0, l = process.argv.length; i < l; i ++){
     break;
   }
   if(process.argv[i] === '-githubpages'){
-    mode += process.argv[i];
+    path.mode += process.argv[i];
     path.strictAbsPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
     path.rootAbsPath = [dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
     path.innerPublicPath = [dotenvData?.PUBLIC_GITHUBPAGES].join('');
@@ -33,7 +90,7 @@ for(let i = 0, l = process.argv.length; i < l; i ++){
     break;
   }
   if(process.argv[i] === '-xserver'){
-    mode += process.argv[i];
+    path.mode += process.argv[i];
     path.strictAbsPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
     path.rootAbsPath = [dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
     path.innerPublicPath = [dotenvData?.PUBLIC_XSERVER].join('');
@@ -41,36 +98,12 @@ for(let i = 0, l = process.argv.length; i < l; i ++){
     break;
   }
 }
+*/
 
 /**
  * PRODモードのパス書き換えを忘れないように
  * データ自体は.envに保存しています
  */
-/*
-const baseHref = {
-  production: (() => {
-    switch(dist){
-      case 'githubpages':
-      return dotenvData?.BASEDIR_GITHUBPAGES;
-      case 'xserver':
-      return dotenvData?.BASEDIR_XSERVER;
-      default:
-      return dotenvData?.BASEDIR_LOCAL;
-    }
-  })(),
-  development: '/',
-};
-const baseUri = (() => {
-  switch(dist){
-    case 'githubpages':
-    return dotenvData?.ABSPATH_GITHUBPAGES;
-    case 'xserver':
-    return dotenvData?.ABSPATH_XSERVER;
-    default:
-    return dotenvData?.ABSPATH_LOCAL;
-  }
-})();
-*/
 
 const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
   ignore: [
@@ -104,9 +137,9 @@ export default defineConfig({
   },
   plugins: [
     vitePluginPugStatic({
-      buildLocals: {mode: mode, version: version, strictAbsPath: path.strictAbsPath, rootAbsPath: path.rootAbsPath, innerPublicPath: path.innerPublicPath, outerPublicPath: path.outerPublicPath},
+      buildLocals: {mode: path.mode, version: path.version, strictAbsPath: path.strictAbsPath, rootAbsPath: path.rootAbsPath, innerPublicPath: path.innerPublicPath, outerPublicPath: path.outerPublicPath},
       buildOptions: {basedir: "src"},
-      serveLocals: {mode: mode, version: version, strictAbsPath: path.strictAbsPath, rootAbsPath: path.rootAbsPath, innerPublicPath: path.innerPublicPath, outerPublicPath: path.outerPublicPath},
+      serveLocals: {mode: path.mode, version: path.version, strictAbsPath: path.strictAbsPath, rootAbsPath: path.rootAbsPath, innerPublicPath: path.innerPublicPath, outerPublicPath: path.outerPublicPath},
       serveOptions: {basedir: "src"},
     }),
     ViteMinifyPlugin({}),

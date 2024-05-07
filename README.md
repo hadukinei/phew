@@ -50,18 +50,13 @@ drag_and_drop project-folder into GitHub_Desktop
 ---
 # 制作
 srcフォルダに、pug, scss, tsファイルを作成する
+npm run devで開発モードの起動、終了はCtrl+Cを2回入力
 
-npm run devで開発し、npm run buildで書き出す
-buildはApacheが通っているフォルダを検証可能
-サーバー用に書き出す場合はnpm run build:serverしてからnpm run copyする
-> ビルドをするとdistフォルダがクリーンアップされるので都度コピーする必要がある
-
-DEVのアドレスは`http://localhost:5173`辺り（ポート番号は変わるかも）
+URLは`http://localhost:5173`辺りになるがポート番号は変わる恐れあり
+vscodeのターミナルに表示されるURLを、Ctrl+左クリックしてブラウザで開く
 
 制作中は、GA/GTAGの設定は後回し
-URLは確定しているのだが、そのURLが未だprivate状態で公開されていないので登録ができない
-
-- `URL`: https://**GitHubアカウント名**.github.io/**リポジトリ名**/
+まだ公開していない状態で開発モードをガンガン回していると、無駄にアナリティクス情報が送信されてしまうので
 
 ## pug
 基本的には通常のpug
@@ -103,15 +98,44 @@ src/img/*.{png,jpe?g,gif,svg}の階層を基本とする
 本来のViteではbody直下には#appとscript(type="module")しかない
 SSRとしての機能を一切使わないのでPugでゴリ押しした
 
-RootDirをデプロイするのでなくdistをデプロイ対象にするので、publicフォルダが機能しない
-公開前に`npm run copy`でdist/publicへとコピーする
-
-
 ---
 ---
-# GitHub Pagesでの公開
+# 書き出し
+開発モード(npm run dev)を終了(Ctrl+Cを2回入力)
+GA/GTAG関連の設定入力は、この時点で行う
 
-## パブリックに変更
+## localhost
+Apacheが効いているフォルダで、localhostによる書き出しチェックを行う
+npm run buildで書き出し
+
+http://localhost/【distへの相対パス】/dist/
+
+## レンタルサーバー
+npm run build:xserverで書き出し
+そしてpublicフォルダも同梱するため、npm run copyを実行
+> npm run copyは、publicフォルダをdist/publicフォルダとしてコピーする命令
+> ビルドをするとdistフォルダがクリーンアップされる上にdistフォルダをドキュメントルートとした場合はpublicフォルダにアクセスできなくなるので都度コピーする必要がある
+
+distフォルダの中身を、FTPソフトでアップロードして動作確認
+
+## GitHub Pages
+npm run build:githubpagesで書き出し
+そしてpublicフォルダも同梱するため、npm run copyを実行
+> npm run copyは以下略
+> この処理はGitHub Pagesの方で特に重大な問題となり用意した
+
+URLは`https://【GitHubアカウント名】.github.io/【リポジトリ名】/`になるとして話を進める
+
+### GitHub Pagesでの公開
+GitHubで管理していたものを、そのまま公開する方法
+
+- 自前でサーバー契約をする必要がない
+- masterブランチにプッシュするだけで自動的に更新内容が変更される
+
+しかし今回はリポジトリのルートディレクトリでなく、その下のdistディレクトリをドキュメントルートとして公開するため少し手順に一手間かかる
+Vite・Pugなどを使わず、直接HTMLを書いていて、リポジトリのルートディレクトリとサーバーとしてのドキュメントルートが同じである場合はすごく簡単に公開できる
+
+#### パブリックに変更
 github.comのリポジトリページへ移動
 
 - Settings
@@ -125,43 +149,16 @@ github.comのリポジトリページへ移動
 - `Click`: Make this repository public [*&#x2020; 1a*](#1a-注釈)
 
 
-### 1a. 注釈
+##### 1a. 注釈
 ```
 - 要はprivateからpublishにするために、
 - 「本当にやってもいいんですね？！」
 - と力強く念押しをしてくれているのでクリックする回数が~~無駄に~~多くなっている
 ```
 
-## 公開設定
-そのままgithub.comで設定処理
 
-- Settings
-- Pages
-- Build and deployment
-- Branch
-- `Select`: from **None** to **master** [*&#x2020; 2a*](#2a-注釈)
-- `Change`: from **/(root)** to **DocumentRootにしたいフォルダ** [*&#x2020; 2b*](#2b-注釈)
-- `Click`: Save
-
-
-### 2a. 注釈
-```
-- 公開するブランチをmaster以外にする場合は適宜変更
-- 例えば公開後に大規模な更新が発生し、それをチームで処理する場合
-- 一度作業用のブランチを切って、そちらでGitの更新を掛ける分にはオートデプロイ処理は行われない
-- フィックスしたらマスターブランチへマージすればよい
-```
-
-### 2b. 注釈
-```
-- リポジトリのトップフォルダを希望するならそのまま
-- そこのindex.htmlがDirectoryIndexになる
-```
-
-## Vite用のデプロイ設定
-通常の方法であればこれで公開処理は完了
-GitHubのページをブラウザリロードすればURLが表示されるようになる
-distフォルダをルートディレクトリにするための設定変更を行う
+### Vite用にdistフォルダ公開
+distフォルダをルートディレクトリにするための設定をして、オートデプロイできるようにする
 
 - Settings
 - Pages
@@ -173,8 +170,35 @@ distフォルダをルートディレクトリにするための設定変更を�
 - `Click`: Commit changes
 
 static.ymlを保存すると、自動的にデプロイ処理が走って完了
-distがルートディレクトリになっている
+distがルートディレクトリになっているのを確認
 > .github/workflows/static.ymlが新たに作成されるのでフェッチすること
+
+### 生のHTMLをそのまま公開
+リポジトリーのルートディレクトリを、そのままドキュメントルートとして利用する方法をついでに補足説明
+この設定を終えれば、同じくオートデプロイできるようになる
+
+- Settings
+- Pages
+- Build and deployment
+- Branch
+- `Select`: from **None** to **master** [*&#x2020; 2a*](#2a-注釈)
+- `Change`: from **/(root)** to **DocumentRootにしたいフォルダ** [*&#x2020; 2b*](#2b-注釈)
+- `Click`: Save
+
+
+##### 2a. 注釈
+```
+- 公開するブランチをmaster以外にする場合は適宜変更
+- 例えば公開後に大規模な更新が発生し、それをチームで処理する場合
+- 一度作業用のブランチを切って、そちらでGitの更新を掛ける分にはオートデプロイ処理は行われない
+- フィックスしたらマスターブランチへマージすればよい
+```
+
+##### 2b. 注釈
+```
+- リポジトリのトップフォルダを希望するならそのまま
+- そこのindex.htmlがDirectoryIndexになる
+```
 
 ---
 ---
@@ -187,9 +211,3 @@ distがルートディレクトリになっている
 
 これで可能と思うが、独自ドメインを持っていないので検証不能
 XServerのサブドメインで実験してみたが駄目だった
-
----
----
-# レンタルサーバーでの公開
-distフォルダ以下を、そのままFTPでアップロードする
-ドメイン名がGitHub Pagesの時からは変わっているので要注意

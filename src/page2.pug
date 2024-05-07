@@ -1,13 +1,11 @@
 doctype html
 html(lang="ja")
   head
-    //- Google tag (gtag.js)
-    if mode === "PROD"
+    if !/(development|production-local)/.test(mode)
+      //- Google tag (gtag.js)
       script(async, src="https://www.googletagmanager.com/gtag/js?id=G-WP6VLHW98T")
       script window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WP6VLHW98T');
-
-    //- Google Tag Manager
-    if mode === "PROD"
+      //- Google Tag Manager
       script (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-W4CNGB7');
 
     //- JSON-LD
@@ -15,18 +13,17 @@ html(lang="ja")
     //- meta, link
     meta(charset=`utf-8`)
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    base(href=baseHref)
+    base(href=rootAbsPath)
 
     title page_2: phew
     meta(name=`description` content=`phew: page_2 description`)
-    meta(property=`og:url` content=`https://hadukinei.github.io/phew/page2.html`)
+    meta(property=`og:url` content=strictAbsPath+"page2.html")
     meta(property=`og:title` content=`phew: page_2`)
     meta(property=`og:description` content=`phew: page_2 description`)
     meta(property=`og:site_name` content=`phew`)
-    if dist === 'server'
-      meta(property=`og:image` content=`https://hadukinei.github.io/phew/public/favicon-512.png`)
-      link(rel=`index` href=`https://hadukinei.github.io/phew/`)
-      link(rel=`canonical` href=`https://hadukinei.github.io/phew/page2.html`)
+    meta(property=`og:image` content=outerPublicPath+"favicon-512.png")
+    link(rel=`index` href=strictAbsPath)
+    link(rel=`canonical` href=strictAbsPath+"page2.html")
 
     meta(name=`robots` content=`index,follow`)
     meta(name=`rating` content=`general`)
@@ -40,12 +37,11 @@ html(lang="ja")
     //-meta(name=`geo.position` content=`34.5136853;135.8463216`)
     meta(name=`geo.region` content=`JP`)
     //-meta(name=`geo.placename` content=`Sakurai city, Nara pref., Japan`)
-    if dist === 'server'
-      link(rel=`icon` href=`https://hadukinei.github.io/phew/public/favicon.ico` sizes=`any`)
-      link(rel=`icon` href=`https://hadukinei.github.io/phew/public/favicon.svg` type=`image/svg+xml`)
-      link(rel=`mask-icon` href=`https://hadukinei.github.io/phew/public/favicon.svg` color=`#000`)
-      link(rel=`apple-touch-icon` href=`https://hadukinei.github.io/phew/public/apple-touch-icon.png`)
-      link(rel=`manifest` href=`https://hadukinei.github.io/phew/public/manifest.webmanifest`)
+    link(rel=`icon` href=innerPublicPath+`favicon.ico` sizes=`any`)
+    link(rel=`icon` href=innerPublicPath+`favicon.svg` type=`image/svg+xml`)
+    link(rel=`mask-icon` href=innerPublicPath+`favicon.svg` color=`#000`)
+    link(rel=`apple-touch-icon` href=innerPublicPath+`apple-touch-icon.png`)
+    link(rel=`manifest` href=innerPublicPath+`manifest.webmanifest`)
     link(rel=`preconnect` href=`https://fonts.googleapis.com`)
     link(rel=`preconnect` href=`https://fonts.gstatic.com` crossorigin=``)
   body
@@ -56,7 +52,7 @@ html(lang="ja")
       link(rel=`stylesheet` href=`https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&family=IBM+Plex+Sans+JP:wght@400&display=swap`)
 
     //- Google Tag Manager (noscript)
-    if mode === "PROD"
+    if !/(development|production-local)/.test(mode)
       noscript
         iframe(src="https://www.googletagmanager.com/ns.html?id=GTM-W4CNGB7", height="0", width="0", style="display:none;visibility:hidden")
 
@@ -64,15 +60,15 @@ html(lang="ja")
       #header(role="heading" arial-level="1")
         header
           h1
-            a(href=baseHref)
+            a(href=rootAbsPath)
               img(src="img/logo.png", alt="Phew Co., Ltd. ロゴ画像")
           ul
             li
-              a(href=baseHref) TOP
+              a(href=rootAbsPath) TOP
             li
-              a(href=baseHref+"page1.html") PAGE_1
+              a(href=rootAbsPath+"page1.html") PAGE_1
             li
-              a(href=baseHref+"page2.html") PAGE_2
+              a(href=rootAbsPath+"page2.html") PAGE_2
       main#main(data-scrollbar)
         #content
           section#heading
@@ -93,12 +89,12 @@ html(lang="ja")
           section#link
             ul
               li.left
-                a(href=baseHref+"page1.html")
+                a(href=rootAbsPath+"page1.html")
                   b PAGE_1
                   span 私は父の神経を過敏にしたくなかったのです。まあ活花の程度ぐらいなものだろうと思いますわ奥さんの言葉は少し手痛かった。
                   i READ MORE
               li.right
-                a(href=baseHref+"page2.html")
+                a(href=rootAbsPath+"page2.html")
                   b PAGE_2
                   span そうしてその妻をいっしょに連れて来なければ、容易に腰を上げない事さえありました。それで奥さんに対して面と向うには足りませんよ。
                   i READ MORE
@@ -111,8 +107,9 @@ html(lang="ja")
                   img(src="img/logo.png", alt="Phew Co., Ltd. ロゴ画像")
                 div
                   strong Phew Co., Ltd.
-                  em 〒369-011i 埼玉県鴻巣市新宿御苑2丁目634-333
+                  em 〒369-011&#x1d48a; 埼玉県鴻巣市新宿御苑2丁目634-333
 
               footer
                 h2 &copy;2024&nbsp;Phew Co., Ltd. as Gothicum.
+                p version #{version}, build #{mode}
     script(type="module", src="ts/page.ts")
