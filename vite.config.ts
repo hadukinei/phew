@@ -6,27 +6,71 @@ import globule from 'globule';
 import { configDotenv } from 'dotenv';
 const dotenvData = configDotenv({path: '.env'}).parsed;
 
-let mode = process.env.NODE_ENV ?? '', dist = 'local';
+let mode = process.env.NODE_ENV ?? '';
+let version = dotenvData?.VERSION;
+let path = {
+  strictAbsPath: [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join(''),
+  rootAbsPath: [dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join(''),
+  innerPublicPath: [dotenvData?.PUBLIC_DEV].join(''),
+  outerPublicPath: [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV, dotenvData?.PUBLIC_DEV].join(''),
+};
+
 for(let i = 0, l = process.argv.length; i < l; i ++){
-  if(process.argv[i] === '-server'){
-    dist = 'server';
+  if(process.argv[i] === '-local'){
+    mode += process.argv[i];
+    path.strictAbsPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
+    path.rootAbsPath = [dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
+    path.innerPublicPath = [dotenvData?.PUBLIC_LOCAL].join('');
+    path.outerPublicPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL, dotenvData?.PUBLIC_LOCAL].join('');
+    break;
+  }
+  if(process.argv[i] === '-githubpages'){
+    mode += process.argv[i];
+    path.strictAbsPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
+    path.rootAbsPath = [dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
+    path.innerPublicPath = [dotenvData?.PUBLIC_GITHUBPAGES].join('');
+    path.outerPublicPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES, dotenvData?.PUBLIC_GITHUBPAGES].join('');
     break;
   }
   if(process.argv[i] === '-xserver'){
-    dist = 'xserver';
+    mode += process.argv[i];
+    path.strictAbsPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
+    path.rootAbsPath = [dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
+    path.innerPublicPath = [dotenvData?.PUBLIC_XSERVER].join('');
+    path.outerPublicPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER, dotenvData?.PUBLIC_XSERVER].join('');
     break;
   }
 }
-console.log(mode, dist);
 
 /**
  * PRODモードのパス書き換えを忘れないように
  * データ自体は.envに保存しています
  */
+/*
 const baseHref = {
-  production: (dist === 'server') ? dotenvData?.BASEDIR_SERVER : (dist === 'xserver' ? dotenvData?.BASEDIR_XSERVER : dotenvData?.BASEDIR_LOCAL),
+  production: (() => {
+    switch(dist){
+      case 'githubpages':
+      return dotenvData?.BASEDIR_GITHUBPAGES;
+      case 'xserver':
+      return dotenvData?.BASEDIR_XSERVER;
+      default:
+      return dotenvData?.BASEDIR_LOCAL;
+    }
+  })(),
   development: '/',
 };
+const baseUri = (() => {
+  switch(dist){
+    case 'githubpages':
+    return dotenvData?.ABSPATH_GITHUBPAGES;
+    case 'xserver':
+    return dotenvData?.ABSPATH_XSERVER;
+    default:
+    return dotenvData?.ABSPATH_LOCAL;
+  }
+})();
+*/
 
 const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
   ignore: [
@@ -37,7 +81,7 @@ const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
 
 export default defineConfig({
   root: 'src',
-  base: baseHref[mode],
+  base: path.rootAbsPath,
   build: {
     emptyOutDir: true,
     outDir: resolve(__dirname, 'dist'),
@@ -60,9 +104,9 @@ export default defineConfig({
   },
   plugins: [
     vitePluginPugStatic({
-      buildLocals: {mode: 'PROD', dist: dist, baseHref: baseHref[mode]},
+      buildLocals: {mode: mode, version: version, strictAbsPath: path.strictAbsPath, rootAbsPath: path.rootAbsPath, innerPublicPath: path.innerPublicPath, outerPublicPath: path.outerPublicPath},
       buildOptions: {basedir: "src"},
-      serveLocals: {mode: 'DEV', dist: dist, baseHref: baseHref[mode]},
+      serveLocals: {mode: mode, version: version, strictAbsPath: path.strictAbsPath, rootAbsPath: path.rootAbsPath, innerPublicPath: path.innerPublicPath, outerPublicPath: path.outerPublicPath},
       serveOptions: {basedir: "src"},
     }),
     ViteMinifyPlugin({}),

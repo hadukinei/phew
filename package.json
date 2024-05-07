@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build -- -local",
     "build:local": "tsc && vite build -- -local",
-    "build:server": "tsc && vite build -- -server",
+    "build:githubpages": "tsc && vite build -- -githubpages",
     "build:xserver": "tsc && vite build -- -xserver",
     "copy": "node copyPublic.js"
   },
