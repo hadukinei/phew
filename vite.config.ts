@@ -6,6 +6,7 @@ import globule from 'globule';
 import { configDotenv } from 'dotenv';
 const dotenvData = configDotenv({path: '.env'}).parsed;
 
+
 /**
  * 必要なURLやPATHを.envから取得
  * @requires PRODモードのパス書き換えを忘れないように
@@ -62,48 +63,7 @@ let path: {mode: string, strictAbsPath: string, rootAbsPath: string, innerPublic
     version: version,
   }
 })();
-/*
-let path: {mode: string, strictAbsPath: string, rootAbsPath: string, innerPublicPath: string, outerPublicPath: string, version: string} = {
-  mode: process.env.NODE_ENV ?? '',
-  strictAbsPath: [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join(''),
-  rootAbsPath: [dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV].join(''),
-  innerPublicPath: [dotenvData?.PUBLIC_DEV].join(''),
-  outerPublicPath: [dotenvData?.DOMAIN_DEV, dotenvData?.DOCROOT_DEV, dotenvData?.SUBDIR_DEV, dotenvData?.PUBLIC_DEV].join(''),
-  version: dotenvData?.VERSION ?? '',
-};
 
-for(let i = 0, l = process.argv.length; i < l; i ++){
-  if(process.argv[i] === '-local'){
-    path.mode += process.argv[i];
-    path.strictAbsPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
-    path.rootAbsPath = [dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL].join('');
-    path.innerPublicPath = [dotenvData?.PUBLIC_LOCAL].join('');
-    path.outerPublicPath = [dotenvData?.DOMAIN_LOCAL, dotenvData?.DOCROOT_LOCAL, dotenvData?.SUBDIR_LOCAL, dotenvData?.PUBLIC_LOCAL].join('');
-    break;
-  }
-  if(process.argv[i] === '-githubpages'){
-    path.mode += process.argv[i];
-    path.strictAbsPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
-    path.rootAbsPath = [dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES].join('');
-    path.innerPublicPath = [dotenvData?.PUBLIC_GITHUBPAGES].join('');
-    path.outerPublicPath = [dotenvData?.DOMAIN_GITHUBPAGES, dotenvData?.DOCROOT_GITHUBPAGES, dotenvData?.SUBDIR_GITHUBPAGES, dotenvData?.PUBLIC_GITHUBPAGES].join('');
-    break;
-  }
-  if(process.argv[i] === '-xserver'){
-    path.mode += process.argv[i];
-    path.strictAbsPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
-    path.rootAbsPath = [dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER].join('');
-    path.innerPublicPath = [dotenvData?.PUBLIC_XSERVER].join('');
-    path.outerPublicPath = [dotenvData?.DOMAIN_XSERVER, dotenvData?.DOCROOT_XSERVER, dotenvData?.SUBDIR_XSERVER, dotenvData?.PUBLIC_XSERVER].join('');
-    break;
-  }
-}
-*/
-
-/**
- * PRODモードのパス書き換えを忘れないように
- * データ自体は.envに保存しています
- */
 
 const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
   ignore: [
@@ -111,6 +71,7 @@ const htmlFiles = globule.find(['*.pug', 'src/**/*.pug'], {
     '_*.*',
   ],
 });
+
 
 export default defineConfig({
   root: 'src',
