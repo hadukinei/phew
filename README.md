@@ -203,11 +203,44 @@ distがルートディレクトリになっているのを確認
 ---
 ---
 # 独自ドメインでの公開
+お名前.comで確認用として登録
+https://zenn.dev/donchan922/articles/59c54fe659128294bb65
+- アカウント登録
+- 左メニュー選択：ドメイン
+- ポップアップメニュー：ドメイン登録
+- メールで認証してドメインを有効化
+- 左メニュー選択：ドメイン
+- ポップアップメニュー：利用ドメイン一覧
+- `Click`: ドメイン名
+- ネームサーバー情報
+- DNSレコード
+- `Click`: 設定
+- `Click`: 次へ
+- DNS設定
+- DNSレコード設定を利用する
+- `Click`: 設定する
+- ホスト名: www, TYPE: CNAME, VALUE: hadukinei.github.io, `Click`: 追加
+- ホスト名: (空欄), TYPE: A, VALUE: 185.199.108.153, `Click`: 追加
+- ホスト名: (空欄), TYPE: A, VALUE: 185.199.109.153, `Click`: 追加
+- ホスト名: (空欄), TYPE: A, VALUE: 185.199.110.153, `Click`: 追加
+- ホスト名: (空欄), TYPE: A, VALUE: 185.199.111.153, `Click`: 追加
+- `Click`: 確認画面へ進む
+- 意図しないDNS設定変更を防ぐために, `Click`: 設定しない
+- `Click`: 設定する
+
+GitHub
 - Settings
 - Pages
 - Custom domain
+- `CheckON`: Enforce HTTPS
 - `Input`: domain
 > https://hoge.fuga.com/でなく、hoge.fuga.comと「ドメイン名」にすること
+- `Click`: Save
 
-これで可能と思うが、独自ドメインを持っていないので検証不能
-XServerのサブドメインで実験してみたが駄目だった
+しばらく「DNS Check in Progress」状態が続く
+24時間程度は覚悟するのでしばらく待機
+
+- Access: https://www.atpv5ro0rnli6in2ykhu0amqnb5qh77k.com
+
+~~これで可能と思うが、独自ドメインを持っていないので検証不能~~
+~~XServerのサブドメインで実験してみたが駄目だった~~
